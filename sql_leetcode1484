@@ -1,0 +1,7 @@
+--# Write your Sql server query statement below
+select sell_date, count(*) as numsold, string_agg(product,',') from
+(SELECT   distinct[Sell_date]
+      , Product
+  FROM [LeetCode].[dbo].[Activities1484]) a
+  group by sell_date
+
