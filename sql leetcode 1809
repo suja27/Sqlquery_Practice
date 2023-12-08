@@ -1,4 +1,4 @@
-// Write a following  Ms sql server code 
+--# Write your Sql server query statement below
 select session_id from Playback1809 a 
 left join Ads1809 b  on  a.Customer  = b.Customer_id
 and b.timestamp between  Start_time and end_time where b.customer_id is null
