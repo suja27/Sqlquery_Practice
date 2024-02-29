@@ -1,0 +1,6 @@
+ Write  your sql query statement below
+with cte  as
+ (Select e.name as empname ,e.salary,d.name, Rank() over(partition by e.departmentId order by salary desc)  rn from Employee185 e
+ inner join Department185  d  on  e.departmentId = d.id)
+ select empname, salary, name from cte
+ where rn<=3
