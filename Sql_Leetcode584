@@ -1,0 +1,3 @@
+--# Write your Sql server query statement bel
+ Select  name from Customer584
+  where referee_id <> 2
