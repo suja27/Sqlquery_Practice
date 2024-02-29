@@ -1,0 +1,5 @@
+# Write your sql query statement below
+select (case when id%2 = 1  and id <( select max(id ) from seat626) then id+1 
+when id%2 = 0 then id-1
+else id end ) as fd, student from Seat626
+order by fd
