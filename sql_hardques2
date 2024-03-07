@@ -1,0 +1,42 @@
+DROP TABLE IF EXISTS FOOTER;
+CREATE TABLE FOOTER 
+(
+	id 			INT PRIMARY KEY,
+	car 		VARCHAR(20), 
+	length 		INT, 
+	width 		INT, 
+	height 		INT
+);
+
+INSERT INTO FOOTER VALUES (1, 'Hyundai Tucson', 15, 6, NULL);
+INSERT INTO FOOTER VALUES (2, NULL, NULL, NULL, 20);
+INSERT INTO FOOTER VALUES (3, NULL, 12, 8, 15);
+INSERT INTO FOOTER VALUES (4, 'Toyota Rav4', NULL, 15, NULL);
+INSERT INTO FOOTER VALUES (5, 'Kia Sportage', NULL, NULL, 18); Pr
+
+Problem Statement
+Wrrite a sql query from footer table to return last non null value from footer table
+
+Solution1
+Select* from(select  top 1  car  from footer
+where car is not null order by  id desc) car
+cross join (select  top 1  length  from footer
+where length is not null order by  id desc)length
+cross join (select  top 1  width  from footer
+where width is not null order by  id desc) Width
+cross join (select  top 1  height from footer
+where height is not null order by  id desc) height
+
+
+ Solution2
+with cte1 as
+ (select  STRING_AGG(car, ',') carList,
+STRING_AGG(length, ',') lengthList,
+STRING_AGG(width, ',') WidthList,
+STRING_AGG(height, ',') heightList
+from footer)
+  select  RIGHT ( carlist,  CHARINDEX(',', reverse(carlist))-1) Car,
+     RIGHT ( lengthList,  CHARINDEX(',', reverse(lengthList))-1) Length,
+	 RIGHT ( WidthList,  CHARINDEX(',', reverse(widthList))-1) Width,
+    RIGHT ( heightList,  CHARINDEX(',', reverse(heightlist))-1) height
+    from cte1
