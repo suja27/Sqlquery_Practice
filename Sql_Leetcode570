@@ -1,0 +1,14 @@
+Write a solution to find managers with at least five direct reports.
+Return the result table in any order
+
+with cte as
+(SELECT  a.[id]
+      , a.[name]
+      , a.[department]
+      ,a.[managerId] 
+	  , b.name as mname
+  FROM [Sql_tech].[dbo].[Employee570] a
+  inner join Employee570 b on a.managerId = b.id)
+  Select name from  Employee570 where id = 
+  (select  managerid  from  cte
+  group by managerid having count(*) >= 5) 
