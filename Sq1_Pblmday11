@@ -1,0 +1,40 @@
+
+Drop table if exists hotel_ratingsq11;
+create table hotel_ratingsQ11
+(
+	hotel 		varchar(30),
+	year		int,
+	rating 		decimal(18,1)
+);
+insert into hotel_ratingsq11 values('Radisson Blu', 2020, 4.8);
+insert into hotel_ratingsq11 values('Radisson Blu', 2021, 3.5);
+insert into hotel_ratingsq11 values('Radisson Blu', 2022, 3.2);
+insert into hotel_ratingsq11 values('Radisson Blu', 2023, 3.8);
+insert into hotel_ratingsq11 values('InterContinental', 2020, 4.2);
+insert into hotel_ratingsq11 values('InterContinental', 2021, 4.5);
+insert into hotel_ratingsq11 values('InterContinental', 2022, 1.5);
+insert into hotel_ratingsq11 values('InterContinental', 2023, 3.8);
+
+"PROBLEM STATEMENT:
+
+In the given input table, there are hotel ratings which are either too high or too low compared to the standard ratings the hotel receives each year. 
+Write a query to identify and exclude these outlier records as shown in expected output below. 
+Your output should follow the same order of records as shown."						
+						
+						
+						
+
+
+select * from
+(select *, rank() over(order by rating desc) rn from hotel_ratingsq11) a
+where rn != 1 and rn != 8
+order by hotel desc, year asc
+
+ Select * from hotel_ratingsq11 where rating  not in
+( Select min(rating) from hotel_ratingsQ11) and  rating  not in( Select max(rating) from hotel_ratingsQ11)
+order by hotel desc, year asc
+
+
+
+
+
