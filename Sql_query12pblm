@@ -1,0 +1,40 @@
+
+DROP TABLE IF EXISTS company;
+CREATE TABLE company
+(
+	employee	varchar(10) primary key,
+	manager		varchar(10)
+);
+
+INSERT INTO company values ('Elon', null);
+INSERT INTO company values ('Ira', 'Elon');
+INSERT INTO company values ('Bret', 'Elon');
+INSERT INTO company values ('Earl', 'Elon');
+INSERT INTO company values ('James', 'Ira');
+INSERT INTO company values ('Drew', 'Ira');
+INSERT INTO company values ('Mark', 'Bret');
+INSERT INTO company values ('Phil', 'Mark');
+INSERT INTO company values ('Jon', 'Mark');
+INSERT INTO company values ('Omid', 'Earl');
+
+Problem
+Write an SQL query to split the hierarchy and show the employees corresponding to their team.
+
+
+Solution
+with a as
+(select c2.employee, c2.manager,1 as hire, ROW_NUMBER()over (order by c2. employee) as team from company c1
+inner join company c2 on c1.employee = c2.manager
+where c1.manager is null
+union all
+Select c3.employee, c3.manager, hire+1, a.team from a
+inner join company c3 on a.employee = c3.manager),
+ b as(
+ select employee, team, row_number()over(partition by team order by hire) rn  from
+(select manager as employee, team ,0 hire  from a
+where hire = 1
+union all
+select employee, team , hire from  a) t)
+ 
+ select  CONCAT('team', team) team , STRING_AGG(employee, ',') within  group(order by rn) mem  from b
+ group by team
