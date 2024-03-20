@@ -1,0 +1,29 @@
+Given table showcases details of pizza delivery order for the year of 2023.
+-- If an order is delayed then the whole order is given for free. Any order that takes 30 minutes more than the expected time is considered as delayed order. 
+-- Identify the percentage of delayed order for each month and also display the total no of free pizzas given each month.
+
+
+DROP TABLE IF EXISTS pizza_delivery;
+CREATE TABLE pizza_delivery 
+(
+	order_id 			INT,
+	order_time 			Datetime,
+	expected_delivery 	datetime,
+	actual_delivery 	datetime,
+	no_of_pizzas 		INT,
+	price 				DECIMAL
+);
+
+SELECT 
+Convert( Varchar(7),order_time,126) MYear,
+Round((cast(sum(Case when
+datediff(Minute, [order_time], [actual_delivery]) > 30
+then 1 else 0 end) as float)/count(1))*100,2) as delayed_order,
+ sum(Case when
+ (datediff(Minute, [order_time], [actual_delivery])) > 30
+  then [no_of_pizzas] else 0 end) as nooffreepizza
+ FROM [Sql_tech].[dbo].[pizza_delivery5]
+where actual_delivery is not null
+ group by   Convert( Varchar(7),order_time,126) 
+
+
