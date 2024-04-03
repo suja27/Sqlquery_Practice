@@ -1,0 +1,46 @@
+
+"PROBLEM STATEMENT: Given tables represent the marks scored by engineering students.
+Create a report to display the following results for each student. 
+  - Student_id, Student name, Total Percentage of all marks
+  - Failed subjects (must be comma seperated values in case of multiple failed subjects)
+  - Result (if percentage >= 70% then 'First Class', if >= 50% & <=70% then 'Second class', if <=50% then 'Third class' else 'Fail'. The result should be Fail if a students fails in any subject irrespective of the percentage marks)
+	*** The sequence of subjects in student_marks table match with the sequential id from subjects table.
+*** Students have the option to choose either 4 or 5 subjects only."													
+																							
+			
+with cte1 as
+(select  student_id ,'subject1' as subject_code, subject1 as marks  from student_marks
+union
+select  student_id ,'subject2' as subject_code, subject2 as marks  from student_marks
+union
+select  student_id ,'subject3' as subject_code, subject3 as marks  from student_marks
+union
+select  student_id ,'subject5' as subject_code, subject4 as marks  from student_marks
+union
+select  student_id ,'subject5' as subject_code, subject5 as marks  from student_marks
+union
+select  student_id ,'subject6' as subject_code, subject6 as marks  from student_marks),
+cte2 as
+(select * from cte1 c
+inner join [dbo].[students] s
+on s.[roll_no] = c.student_id
+where marks is not null),
+
+
+cte3 as( select  subject_code, pass_marks, name  from
+(select ROW_NUMBER() over(order by ordinal_position) rn1, column_name  as subject_code from INFORMATION_SCHEMA.COLUMNS 
+where table_name = 'student_marks' and  column_name like 'subject%') A
+inner join 
+(select * ,row_number() over (order by id) rn2 from subjects)  b on a.rn1 = b.rn2),
+cte4 as
+(select  student_id,c2.name,
+avg(marks ) as percentage,
+string_agg(case when marks >= pass_marks then null else c3.name end,' , ') as Failed_sub
+from cte2 c2
+inner join cte3  c3 on c2.subject_code = c3.subject_code
+group by student_id, c2.name)
+Select *, case when failed_sub  is not null then  'fail'
+when percentage>= 70 then 'First class'
+when percentage between 50  and 70 then 'Second class'
+when percentage < 50  then 'Third class' end as result  from cte4 
+
