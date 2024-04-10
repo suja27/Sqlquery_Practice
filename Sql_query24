@@ -1,0 +1,11 @@
+Select manager_id from emp
+union all
+Select manager_id from emp1
+ -- Return all the rows from both table.
+
+
+Select manager_id from emp
+union 
+Select manager_id from emp1
+--- Return only unique rows, remove the duplicate rows
+
