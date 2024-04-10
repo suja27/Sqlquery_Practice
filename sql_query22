@@ -1,0 +1,3 @@
+
+ -- write a sql query to cteate a new table using select statement
+ select * into emp1 from emp
