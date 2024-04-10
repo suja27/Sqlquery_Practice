@@ -1,0 +1,13 @@
+create table emp(
+emp_id int,
+emp_name varchar(20),
+department_id int,
+salary int,
+manager_id int,
+emp_age int);
+
+
+--Write a sql query to find a duplicate row in the above emp table
+ Select  emp_id, count(*) cnt from emp
+ group by emp_id having count(*)>1 
+
