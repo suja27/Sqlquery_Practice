@@ -1,0 +1,20 @@
+create table emp(
+emp_id int,
+emp_name varchar(20),
+department_id int,
+salary int,
+manager_id int,
+emp_age int);
+
+
+create table department(
+ 
+ dept_id int,
+ dept_name varchar(10)
+ );
+
+
+-- Employee who are not present in dept table 
+
+ select * from emp where department_id not in ( select dept_id from department )
+
