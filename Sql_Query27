@@ -1,0 +1,21 @@
+ Write a sql query to find entry-exit time of user based on log captured.
+
+CREATE TABLE user_activity (
+    user_id INT,
+    entry_time DATETIME,
+    exit_time DATETIME
+);
+
+
+-- Inserting sample data into the user_activity table
+INSERT INTO user_activity (user_id, entry_time, exit_time) VALUES
+(1, '2024-03-01 08:05:00', '2024-03-01 09:30:00'),
+(2, '2024-03-01 08:10:00', '2024-03-01 09:15:00'),
+(1, '2024-03-01 10:00:00', '2024-03-01 11:45:00'),
+(3, '2024-03-01 08:30:00', '2024-03-01 10:00:00'),
+(2, '2024-03-01 09:00:00', '2024-03-01 10:30:00'),
+(3, '2024-03-01 10:30:00', '2024-03-01 12:00:00');
+
+Solution 
+ Select user_id, min(entry_time) start_time , max(exit_time) end_time from user_activity
+ group  by user_id 
