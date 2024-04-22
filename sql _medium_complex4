@@ -1,0 +1,23 @@
+
+--- Write a sql query to find the room type are searched  most number of times
+
+Create table airbnb_searches 
+(
+user_id int,
+date_searched date,
+filter_room_types varchar(200)
+);
+delete from airbnb_searches;
+insert into  values
+(1,'2022-01-01','entire home,private room')
+,(2,'2022-01-02','entire airbnb_searcheshome,shared room')
+,(3,'2022-01-02','private room,shared room')
+,(4,'2022-01-03','private room')
+;
+
+ Solution
+  
+Select value, count(*) cnt  from 
+ (Select *  from airbnb_searches  cross  apply  string_split( filter_room_types ,',') )A
+ group by value
+ order by  count(*) desc
