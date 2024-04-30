@@ -1,0 +1,23 @@
+  Write a sql query to find average highest movie rating for each gener and print * (star) for movie rating
+
+CREATE TABLE movies (
+    id INT PRIMARY KEY,
+    genre VARCHAR(50),
+    title VARCHAR(100)
+);
+
+-- Create reviews table
+CREATE TABLE reviews (
+    movie_id INT,
+    rating DECIMAL(3,1),
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+solution 
+with cte1 as
+(select m.genre, m.title, avg(rating)avgrating,
+ row_number() over (partition by genre order by avg(rating) desc) as rn 
+from [dbo].[movies] m
+inner join [dbo].[reviews] r on m.[id] = r.[movie_id]
+group by m.genre, m.title)
+select genre, title, round(avgrating, 0) as maxrating, REPLICATE ('*',round(avgrating, 0)) star  from  cte1 
+where rn = 1
