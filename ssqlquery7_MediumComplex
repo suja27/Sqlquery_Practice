@@ -1,0 +1,26 @@
+----Write a sql query  to find  a missing  number
+
+
+CREATE TABLE products (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    price DECIMAL(10, 2)
+);
+
+INSERT INTO products (id, name, price) VALUES
+(1, 'Product A', 10.99),
+(2, 'Product B', 15.49),
+(4, 'Product D', 8.79),
+(5, 'Product E', 12.99),
+(6, 'Product F', 18.99),
+(7, 'Product G', 22.49),
+(9, 'Product I', 14.29),
+(10, 'Product J', 9.99);
+
+with cte as(
+Select min(id) mini, max(id)maxi from products),
+cte1 as 
+( select mini from cte 
+ union all 
+select mini+1 from cte1 where mini <( select maxi from cte))
+ select mini from cte1 where mini not in (select id from products)
