@@ -1,0 +1,33 @@
+
+--- write a sql query  to Forward Filling By Contextual Inference ( null value filling)
+
+CREATE TABLE [dbo].[product](
+ [category] [varchar](100) NULL,
+ [product_name] [varchar](50) NULL
+)
+
+INSERT INTO product (category, product_name) 
+VALUES 
+('Chocolate', 'KitKat'),
+(NULL, 'Snickers'),
+(NULL, 'Cadbury'),
+(NULL, 'Ferrero Rocher'),
+('Biscuits', 'Parle-G'),
+(NULL, 'McVitie\''s'),
+(NULL, 'Oreo'),
+(NULL, 'Hide & Seek'),
+('Soft Drinks', 'Coca-Cola'),
+(NULL, 'Pepsi'),
+(NULL, 'Sprite'),
+(NULL, 'Fanta'),
+('Electronics', 'Samsung'),
+(NULL, 'Apple'),
+(NULL, 'Sony');
+solution
+with cte as
+(select *, ROW_NUMBER() over(order by (select null)) Rn from product),
+cte2 as
+(SELECT *, count(category) over( order by RN) pn
+FROM CTE)
+select *,first_value(category)  over(partition by pn order by rn) from cte2
+
