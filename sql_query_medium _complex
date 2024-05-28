@@ -1,0 +1,39 @@
+Problem :  write a sql query to find  final list of passengers allowed to enter the lift based on the maximum capacity of the lift.
+
+
+create table lifts
+(
+      id         	  int
+    , capacity_kg     int
+);
+
+insert into lifts values (1, 300);
+insert into lifts values (2, 350);
+
+create table lift_passengers
+(
+      passenger_name    varchar(50)
+    , weight_kg     	int
+	, lift_id			int
+);
+
+insert into lift_passengers values ('Rahul', 85, 1);
+insert into lift_passengers values ('Adarsh', 73, 1);
+insert into lift_passengers values ('Riti', 95, 1);
+insert into lift_passengers values ('Dheeraj', 80, 1);
+insert into lift_passengers values ('Vimal', 83, 2);
+insert into lift_passengers values ('Neha', 77, 2);
+insert into lift_passengers values ('Priti', 73, 2);
+insert into lift_passengers values ('Himanshi', 85, 2);
+
+
+  Solution 
+ with cte as
+(select *,sum(weight_kg) over (partition by id order by weight_kg)  rnsum,
+case when sum(weight_kg) over (partition by id order by weight_kg) <capacity_kg then 1 else 0 end pplmit
+from lifts l
+inner join lift_passengers lp on l.id = lp.lift_id)
+--order by id, weight_kg)
+ select id, STRING_AGG(passenger_name, ',') from cte
+ where pplmit = 1
+ group by id
