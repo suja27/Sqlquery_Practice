@@ -1,3 +1,4 @@
 --# Write your Sql server query statement below
+
  select count( distinct(customer_id) )from [dbo].[Store2082]
  where amount >500
